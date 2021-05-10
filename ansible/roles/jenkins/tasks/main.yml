@@ -1,0 +1,28 @@
+---
+
+# Configure Jenkins
+
+- name: add jenkins apt respository key
+  apt_key:
+    url: https://pkg.jenkins.io/debian-stable/jenkins.io.key
+    state: present
+
+- name: append jenkins package to sources
+  apt_repository:
+    repo: deb https://pkg.jenkins.io/debian-stable binary/
+    state: present
+
+- name: Install Jenkins
+  apt:
+    update_cache: yes
+    name: jenkins
+    state: present
+
+- name: get jenkins password
+  shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+  changed_when: false
+  register: result
+
+- name: print jenkins password
+  debug:
+    var: result.stdout

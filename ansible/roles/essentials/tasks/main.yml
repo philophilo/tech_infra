@@ -1,0 +1,14 @@
+---
+# install essetials
+
+- name: install server base packages
+  apt:
+    update_cache: yes
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - wget
+    - openjdk-8-jdk
+    - apt-transport-https
+    - ca-certificates
+

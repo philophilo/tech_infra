@@ -1,0 +1,17 @@
+---
+
+- name: Jenkins/Docker instance
+  hosts: all
+  become: yes
+  become_method: sudo
+  remote_user: ubuntu
+
+  vars:
+    dir: /home/ubuntu
+    app_dir: /home/ubuntu/app
+    ansible_python_interpreter: "/usr/bin/python3"
+
+  roles:
+    - essentials
+    - jenkins
+    - docker
