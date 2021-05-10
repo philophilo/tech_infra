@@ -1,0 +1,49 @@
+{
+    "variables": {
+        "access_key": "{{env `aws_access_key`}}",
+        "secret_key": "{{env `aws_secret_access`}}",
+        "region": "{{env `aws_region`}}",
+        "vpc_id": "{{env `vpc_id`}}",
+        "vpc_public_sn_id": "{{env `vpc_public_sn_id`}}",
+        "vpc_public_sg_id": "{{env `vpc_public_sg_id`}}"
+    },
+
+    "builders": [
+        {
+            "type": "amazon-ebs",
+            "region": "{{user `region`}}",
+            "access_key": "{{user `access_key`}}",
+            "secret_key": "{{user `secret_key`}}",
+            "vpc_id": "{{user `vpc_id`}}",
+            "subnet_id": "{{user `vpc_public_sn_id`}}",
+            "associate_public_ip_address": true,
+            "security_group_id": "{{user `vpc_public_sg_id`}}",
+            "source_ami": "ami-09e67e426f25ce0d7",
+            "instance_type": "t2.micro",
+            "ssh_username": "ubuntu",
+            "ami_name": "testz-{{isotime | clean_resource_name}}",
+            "ami_description": "Ubuntu 20.04 Instance",
+            "tags": {
+                "role": "testz"
+            },
+            "run_tags": {
+                "role": "testz"
+            },
+            "launch_block_device_mappings": [
+                {
+                    "device_name": "/dev/sda1",
+                    "volume_type": "gp2",
+                    "volume_size": "30",
+                    "delete_on_termination": true
+                }
+            ]
+        }
+    ],
+
+    "provisioners":[
+        {
+            "type": "ansible",
+            "playbook_file": "ansible/playbook.yml"
+        }
+    ]
+}
